@@ -2,7 +2,7 @@
 class Tumblr_SiteConfig_Extension extends DataExtension
 {
     private static $db = array(
-      'TumblrBlogName' => 'Varchar(64)'
+      'TumblrBlogName' => 'Varchar(64)',
       'TumblrConsumerKey' => 'Varchar(100)',
       'TumblrConsumerSecret' => 'Varchar(100)'
     );

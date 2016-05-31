@@ -1,5 +1,5 @@
 <?php
-class Tumblr_Page_Controller_Extension extends Extension
+class Tumblr_Page_Extension extends Extension
 {
     const DEFAULT_LIMIT = 12;
 
@@ -26,40 +26,69 @@ class Tumblr_Page_Controller_Extension extends Extension
             && !empty($config->TumblrConsumerSecret);
     }
 
-    public function TumblrPostsList($type = "", $limit = self::DEFAULT_LIMIT, $offset = 0, $options = array())
-    {
-        $results = new ArrayList();
+    /**
+     * Recursively converts nested objects and arrays to Silverstripe ArrayList/ArrayData
+     *
+     * @param object    $obj    The object to iterate (stdClass)
+     * @return ArrayList|ArrayData  Completed conversion
+     */
+    protected static function recursive_conversion_iterator($obj) {
+        if(is_object($obj) || is_array($obj)) {   
+            //Check for properties with non-object values
+            $is_list = true;         
+            foreach($obj as &$item) {
+                if(is_object($item) || is_array($item))
+                    $item = self::recursive_conversion_iterator($item);
+                else
+                    $is_list = false;
+            }
+        }
+        //Format parent
+        if($is_list || is_array($obj))
+            $obj = ArrayList::create((array) $obj);
+        else
+            $obj = ArrayData::create((array) $obj);
+        return $obj;
+    }
+
+    public function TumblrPostsList($limit = self::DEFAULT_LIMIT, $offset = 0, $type = "", $options = array())
+    {        
         $config = SiteConfig::current_site_config();
 
-        if ($this->CheckConfig($config)) {
-            $cache = SS_Cache::factory('Tumblr_cache');
-            if (!($results = unserialize($cache->load(__FUNCTION__)))) {
+        if (!$this->CheckConfig($config)) 
+        {
+            return new ArrayList();
+        }
+        else
+        {
+            //$cache = SS_Cache::factory('Tumblr_cache');
+            //if (!($results = unserialize($cache->load(__FUNCTION__)))) {
+                $results = new ArrayList();
 
-                if(!empty($type) && defined('POST_TYPE_'.strtoupper($type)))
+                if(!empty($type) && defined('self::POST_TYPE_'.strtoupper($type)))
                 {
-                    $options[OPTION_TYPE] = $type;
+                    $options[self::OPTION_TYPE] = $type;
                 }
                 if(is_numeric($limit) && $limit > 0)
                 {
-                    $options[OPTION_LIMIT] = $limit;
+                    $options[self::OPTION_LIMIT] = $limit;
                 }
                 if(is_numeric($offset) && $offset > 0)
                 {
-                    $options[OPTION_OFFSET] = $offset;
+                    $options[self::OPTION_OFFSET] = $offset;
                 }
 
                 $client = new Tumblr\API\Client($config->TumblrConsumerKey, $config->TumblrConsumerSecret);
                 
                 # *** error/exception handling?
                 $response = $client->getBlogPosts($config->TumblrBlogName, $options);
-
                 foreach($response->posts as $post)
-                {
-                    $results->push(new ArrayData($post));
-                }
-
-                $cache->save(serialize($results), __FUNCTION__);
-            }
+                {               
+                    $results->push(self::recursive_conversion_iterator($post));
+                }            
+                # ***cache by parameters
+                //$cache->save(serialize($results), __FUNCTION__);
+            //}
         }
         return $results;
     }
@@ -76,7 +105,7 @@ class Tumblr_Page_Controller_Extension extends Extension
         {
             $options[self::OPTION_FILTER] = self::OPTION_FILTER_TEXT;
         }
-        return $this->TumblrPostsList(self::POST_TYPE_TEXT, $limit, $offset, $options);
+        return $this->TumblrPostsList($limit, $offset, self::POST_TYPE_TEXT, $options);
     }
 
     public function TumblrQuotePostsList($limit = null, $offset = null, $tag = "", $text = false)
@@ -91,7 +120,7 @@ class Tumblr_Page_Controller_Extension extends Extension
         {
             $options[self::OPTION_FILTER] = self::OPTION_FILTER_TEXT;
         }
-        return $this->TumblrPostsList(self::POST_TYPE_QUOTE, $limit, $offset, $options);
+        return $this->TumblrPostsList($limit, $offset, self::POST_TYPE_QUOTE, $options);
     }
 
     public function TumblrLinkPostsList($limit = null, $offset = null, $tag = "", $text = false)
@@ -106,7 +135,7 @@ class Tumblr_Page_Controller_Extension extends Extension
         {
             $options[self::OPTION_FILTER] = self::OPTION_FILTER_TEXT;
         }
-        return $this->TumblrPostsList(self::POST_TYPE_TEXT, $limit, $offset, $options);
+        return $this->TumblrPostsList($limit, $offset, self::POST_TYPE_LINK, $options);
     }
 
     public function TumblrAnswerPostsList($limit = null, $offset = null, $tag = "", $text = false)
@@ -121,7 +150,7 @@ class Tumblr_Page_Controller_Extension extends Extension
         {
             $options[self::OPTION_FILTER] = self::OPTION_FILTER_TEXT;
         }
-        return $this->TumblrPostsList(self::POST_TYPE_TEXT, $limit, $offset, $options);
+        return $this->TumblrPostsList($limit, $offset, self::POST_TYPE_ANSWER, $options);
     }
 
     public function TumblrVideoPostsList($limit = null, $offset = null, $tag = "", $text = false)
@@ -136,7 +165,7 @@ class Tumblr_Page_Controller_Extension extends Extension
         {
             $options[self::OPTION_FILTER] = self::OPTION_FILTER_TEXT;
         }
-        return $this->TumblrPostsList(self::POST_TYPE_TEXT, $limit, $offset, $options);
+        return $this->TumblrPostsList($limit, $offset, self::POST_TYPE_VIDEO, $options);
     }
 
     public function TumblrAudioPostsList($limit = null, $offset = null, $tag = "", $text = false)
@@ -151,7 +180,7 @@ class Tumblr_Page_Controller_Extension extends Extension
         {
             $options[self::OPTION_FILTER] = self::OPTION_FILTER_TEXT;
         }
-        return $this->TumblrPostsList(self::POST_TYPE_TEXT, $limit, $offset, $options);
+        return $this->TumblrPostsList($limit, $offset, self::POST_TYPE_AUDIO, $options);
     }
 
     public function TumblrPhotoPostsList($limit = null, $offset = null, $tag = "", $text = false)
@@ -166,7 +195,7 @@ class Tumblr_Page_Controller_Extension extends Extension
         {
             $options[self::OPTION_FILTER] = self::OPTION_FILTER_TEXT;
         }
-        return $this->TumblrPostsList(self::POST_TYPE_TEXT, $limit, $offset, $options);
+        return $this->TumblrPostsList($limit, $offset, self::POST_TYPE_PHOTO, $options);
     }
 
     public function TumblrChatPostsList($limit = null, $offset = null, $tag = "", $text = false)
@@ -181,7 +210,7 @@ class Tumblr_Page_Controller_Extension extends Extension
         {
             $options[self::OPTION_FILTER] = self::OPTION_FILTER_TEXT;
         }
-        return $this->TumblrPostsList(self::POST_TYPE_TEXT, $limit, $offset, $options);
+        return $this->TumblrPostsList($limit, $offset, self::POST_TYPE_CHAT, $options);
     }
 
     public function TumblrPost($id, $text = false)
@@ -196,15 +225,7 @@ class Tumblr_Page_Controller_Extension extends Extension
         {
             $options[self::OPTION_FILTER] = self::OPTION_FILTER_TEXT;
         }
-        return $this->TumblrPostsList("", null, null, $options);
+        return $this->TumblrPostsList(null, null, "", $options);
     }
 
-
-    #####
-
-
-    public function LatestTweets()
-    {
-        return $this->owner->renderWith('LatestTweets');
-    }
 }
