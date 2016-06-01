@@ -3,6 +3,7 @@
   "type": "silverstripe-module",
   "description": "Tumblr API module for SilverStripe.",
   "keywords": ["silverstripe", "tumblr"],
+  "license": "CC0 1.0 Universal",
   "authors": [{
     "name": "Thomas Kiehne",
     "email": "tkiehne@gmx.us"
