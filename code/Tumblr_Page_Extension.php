@@ -26,7 +26,7 @@ class TumblrPageExtension extends Extension
     /**
      * Check for required config values
      *
-     * @param  SiteConfig    $config    the current SS SiteConfig
+     * @param  \SiteConfig    $config    the current SS SiteConfig
      * @return boolean required config strings are present (true) or not (false)
      */
     private function checkConfig($config) 
@@ -70,7 +70,7 @@ class TumblrPageExtension extends Extension
      * @param string  $type    the type of post to retrieve, or blank for all
      * @param array   $options associative array of API options
      *
-     * @return StdClass containing json decoded API results
+     * @return \StdClass containing json decoded API results
      */
     public function TumblrPostsList($limit = self::DEFAULT_LIMIT, $offset = 0, $type = "", $options = array())
     {        
@@ -121,7 +121,7 @@ class TumblrPageExtension extends Extension
      * @param string  $tag     single tag to filter by
      * @param boolean $text    return html-formatted user strings (false) or plain text (true)
      *
-     * @return StdClass containing json decoded API results
+     * @return \StdClass containing json decoded API results
      */
     public function TumblrTextPostsList($limit = null, $offset = null, $tag = "", $text = false)
     {
@@ -144,7 +144,7 @@ class TumblrPageExtension extends Extension
      * @param string  $tag     single tag to filter by
      * @param boolean $text    return html-formatted user strings (false) or plain text (true)
      *
-     * @return StdClass containing json decoded API results
+     * @return \StdClass containing json decoded API results
      */
     public function TumblrQuotePostsList($limit = null, $offset = null, $tag = "", $text = false)
     {
@@ -167,7 +167,7 @@ class TumblrPageExtension extends Extension
      * @param string  $tag     single tag to filter by
      * @param boolean $text    return html-formatted user strings (false) or plain text (true)
      *
-     * @return StdClass containing json decoded API results
+     * @return \StdClass containing json decoded API results
      */
     public function TumblrLinkPostsList($limit = null, $offset = null, $tag = "", $text = false)
     {
@@ -190,7 +190,7 @@ class TumblrPageExtension extends Extension
      * @param string  $tag     single tag to filter by
      * @param boolean $text    return html-formatted user strings (false) or plain text (true)
      *
-     * @return StdClass containing json decoded API results
+     * @return \StdClass containing json decoded API results
      */
     public function TumblrAnswerPostsList($limit = null, $offset = null, $tag = "", $text = false)
     {
@@ -213,7 +213,7 @@ class TumblrPageExtension extends Extension
      * @param string  $tag     single tag to filter by
      * @param boolean $text    return html-formatted user strings (false) or plain text (true)
      *
-     * @return StdClass containing json decoded API results
+     * @return \StdClass containing json decoded API results
      */
     public function TumblrVideoPostsList($limit = null, $offset = null, $tag = "", $text = false)
     {
@@ -236,7 +236,7 @@ class TumblrPageExtension extends Extension
      * @param string  $tag     single tag to filter by
      * @param boolean $text    return html-formatted user strings (false) or plain text (true)
      *
-     * @return StdClass containing json decoded API results
+     * @return \StdClass containing json decoded API results
      */
     public function TumblrAudioPostsList($limit = null, $offset = null, $tag = "", $text = false)
     {
@@ -259,7 +259,7 @@ class TumblrPageExtension extends Extension
      * @param string  $tag     single tag to filter by
      * @param boolean $text    return html-formatted user strings (false) or plain text (true)
      *
-     * @return StdClass containing json decoded API results
+     * @return \StdClass containing json decoded API results
      */
     public function TumblrPhotoPostsList($limit = null, $offset = null, $tag = "", $text = false)
     {
@@ -282,7 +282,7 @@ class TumblrPageExtension extends Extension
      * @param string  $tag     single tag to filter by
      * @param boolean $text    return html-formatted user strings (false) or plain text (true)
      *
-     * @return StdClass containing json decoded API results
+     * @return \StdClass containing json decoded API results
      */
     public function TumblrChatPostsList($limit = null, $offset = null, $tag = "", $text = false)
     {
@@ -303,7 +303,7 @@ class TumblrPageExtension extends Extension
      * @param integer $id   Tumblr ID of post
      * @param boolean $text return html-formatted user strings (false) or plain text (true)
      *
-     * @return StdClass containing json decoded API result
+     * @return \StdClass containing json decoded API result
      */
     public function TumblrPost($id, $text = false)
     {

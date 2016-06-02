@@ -37,8 +37,8 @@ Silverstripe module to load Tumblr feeds via Tumblr API V2
 ```
 
 *  Build and flush using `/dev/build/?flush=1`
-*  Add Tumblr API keys and blog name via Admin > Settings > Tumblr tab
-*  Place Include call in your template (see below for options), e.g.:
+*  Add Tumblr API keys and blog name via Admin > Settings > Tumblr tab ([Register your application](https://www.tumblr.com/oauth/apps) to get your API keys)
+*  Place and Include call in your template (see below for options), e.g.:
 
 ```
     <% include TumblrPosts Posts=$TumblrPostsList %>
@@ -95,3 +95,16 @@ Silverstripe module to load Tumblr feeds via Tumblr API V2
 By default, the `TumblrPosts.ss` include will call subsequent includes depending on post type.  To customize the list container, override or create a copy of `TumblrPosts`.  To customize the way that posts are displayed within the container, override the respective `Tumblr[TYPE]Post.ss` or, if you've customized the container, create your own include.
 
 Include variables follow the syntax and structure of the [Tumblr API](https://www.tumblr.com/docs/en/api/v2#posts), based on the "posts" collection of the response.  See the module's default includes for examples and be aware of template context.
+
+
+## Caching
+
+This module uses SS_Cache to reduce the amount of API requests. Default cache lifetime is 30 minutes.
+You can change this value by putting this line in your `_config.php` (1800 is cache lifetime in seconds):
+
+    SS_Cache::set_cache_lifetime('tumblr_api_cache', 1800, 10);
+
+
+## Dependencies
+
+Uses the official [`Tumblr API v2 PHP Client`](https://github.com/tumblr/tumblr.php)
