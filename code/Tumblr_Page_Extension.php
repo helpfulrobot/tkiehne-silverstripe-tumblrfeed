@@ -2,7 +2,7 @@
 /**
  * A wrapper class for the Tumblr API
  */
-class Tumblr_Page_Extension extends Extension
+class TumblrPageExtension extends Extension
 {
     const DEFAULT_LIMIT = 20; // current max per API
 
@@ -29,7 +29,7 @@ class Tumblr_Page_Extension extends Extension
      * @param  SiteConfig    $config    the current SS SiteConfig
      * @return boolean required config strings are present (true) or not (false)
      */
-    private function CheckConfig($config) {
+    private function checkConfig($config) {
         return !empty($config->TumblrBlogName)
             && !empty($config->TumblrConsumerKey)
             && !empty($config->TumblrConsumerSecret);
@@ -74,7 +74,7 @@ class Tumblr_Page_Extension extends Extension
     {        
         $config = SiteConfig::current_site_config();
 
-        if (!$this->CheckConfig($config)) 
+        if (!$this->checkConfig($config)) 
         {
             return new ArrayList();
         }

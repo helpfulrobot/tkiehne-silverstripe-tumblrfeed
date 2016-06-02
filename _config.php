@@ -12,4 +12,4 @@ SS_Cache::add_backend('tumblr_api_cache', 'File', array('cache_dir' => TEMP_FOLD
 SS_Cache::set_cache_lifetime('tumblr_api_cache', 1800, 10);
 SS_Cache::pick_backend('tumblr_api_cache', 'any', 10);
 
-Object::add_extension('SiteConfig', 'Tumblr_SiteConfig_Extension');
+Object::add_extension('SiteConfig', 'TumblrSiteConfigExtension');

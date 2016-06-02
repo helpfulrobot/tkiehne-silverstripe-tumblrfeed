@@ -1,5 +1,5 @@
 <?php
-class Tumblr_SiteConfig_Extension extends DataExtension
+class TumblrSiteConfigExtension extends DataExtension
 {
     private static $db = array(
       'TumblrBlogName' => 'Varchar(64)',

@@ -27,13 +27,13 @@ Silverstripe module to load Tumblr feeds via Tumblr API V2
 ```
     Page:
         extensions:
-            - Tumblr_Page_Extension
+            - TumblrPageExtension
 ```
 
   or set the following call in `mysite/_config.php`:
    
 ```
-    Page::add_extension('Tumblr_Page_Extension');
+    Page::add_extension('TumblrPageExtension');
 ```
 
 *  Build and flush using `/dev/build/?flush=1`
