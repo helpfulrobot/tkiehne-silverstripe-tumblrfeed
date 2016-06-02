@@ -82,7 +82,7 @@ class Tumblr_Page_Extension extends Extension
         {
             $cache_key = __FUNCTION__.'_'.md5($limit.$offset.$type.implode($options));
 
-            $cache = SS_Cache::factory('cache.tumblr.api');
+            $cache = SS_Cache::factory('tumblr_api_cache');
             if (!($results = unserialize($cache->load($cache_key)))) {
                 $results = new ArrayList();
 
@@ -90,7 +90,7 @@ class Tumblr_Page_Extension extends Extension
                 {
                     $options[self::OPTION_TYPE] = $type;
                 }
-                if(is_numeric($limit) && $limit > 0 && $limit <= DEFAULT_LIMIT)
+                if(is_numeric($limit) && $limit > 0 && $limit <= self::DEFAULT_LIMIT)
                 {
                     $options[self::OPTION_LIMIT] = $limit;
                 }
@@ -108,7 +108,7 @@ class Tumblr_Page_Extension extends Extension
                         $results->push(self::recursive_conversion_iterator($post));
                     }            
                 }
-                catch(RequestException e) {
+                catch(RequestException $e) {
                     // *** maybe we should do something?
                 }
                 $cache->save(serialize($results), $cache_key);
